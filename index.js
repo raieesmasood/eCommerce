@@ -2,6 +2,7 @@ const express = require("express");
 const connectDb = require("./config/db");
 const morgan = require("morgan");
 
+
 const dotenv = require("dotenv");
 
 //config env
@@ -20,9 +21,13 @@ app.use(morgan("dev"));
 //port
 const port = process.env.PORT || 8825;
 
-
+//yser routes
 const userRoutes = require('./routes/userRoutes')
 app.use('/user', userRoutes)
+
+//admin routes
+const adminRoute = require('./routes/adminRoute')
+app.use('admin', adminRoute)
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello from ecom server!</h1>");
