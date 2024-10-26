@@ -3,7 +3,7 @@ const dotenv = require ('dotenv')
 dotenv.config()
 
 //protected route Token base 
-const userAuthentication= (req, res, next)=>{
+const userAuthentication= async (req, res, next)=>{
     try {
         const authHeader = req.headers.authorization;
         const decode = JWT.verify(authHeader, process.env.JWT_SECRET)

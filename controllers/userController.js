@@ -48,9 +48,10 @@ const signupController = async (req, res) => {
   }
 };
 
+//login
+
 const loginController = async (req, res) => {
   try {
-
     const { email, password } = req.body;
     if (!email || !password) {
       return res.data(400).json({ message: '"All Data Fields Required!' });
@@ -70,27 +71,35 @@ const loginController = async (req, res) => {
 
     //creating token
     const secretkey = process.env.JWT_SECRET;
-    const userid = existingUser._id
+    const userid = existingUser._id;
 
-    const createToken = JWT.sign({userid}, secretkey , {expiresIn:"7d"})
+    const createToken = JWT.sign({ userid }, secretkey, { expiresIn: "7d" });
     if (!createToken) {
-        return res.status(400).json({ message: "Login Token Not Created!" });
-      }
-      else {
-        // Send token to the client
-        return res.status(200).json({ message: "User Logged In", token: createToken});
-      }
-    } 
-catch (error) {
+      return res.status(400).json({ message: "Login Token Not Created!" });
+    } else {
+      // Send token to the client
+      return res
+        .status(200)
+        .json({
+          message: "User Logged In",
+          user: {
+            name: existingUser.name,
+            email: existingUser.email,
+            phone: existingUser.phone,
+            address: existingUser.address,
+          },
+          token: createToken,
+        });
+    }
+  } catch (error) {
     console.error("Error while login:", error);
-    return res.status(500).json({ message: "Internal Server Error!"});
+    return res.status(500).json({ message: "Internal Server Error!" });
   }
 };
 
-
-const testController = (req,res)=>{
-  console.log("protected route")
-  res.send('Helo from protected route')
-}
+const testController = (req, res) => {
+  console.log("protected route");
+  res.send("Helo from protected route");
+};
 
 module.exports = { signupController, loginController, testController };
